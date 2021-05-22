@@ -5,9 +5,9 @@ import random
 pygame.init()
 
 #Konstanta global
-LAYAR_TINGGI = 600
-LAYAR_LEBAR = 1100
-LAYAR = pygame.display.set_mode((LAYAR_LEBAR,LAYAR_TINGGI))
+papan_tinggi = 600
+papan_lebar = 1100
+papan = pygame.display.set_mode((papan_lebar,papan_tinggi))
 
 WARNA_HITAM = (0, 0, 0)
 WARNA_PUTIH = (255, 255, 255)
@@ -117,13 +117,13 @@ class Dinosaurus:
             self.dino_lompat = False
             self.gerak_lompat = self.KECEPATAN_LOMPAT
     
-    def tampil(self, LAYAR):
-        LAYAR.blit(self.gambar, (self.kotak_dino.x, self.kotak_dino.y))
+    def tampil(self, papan):
+        papan.blit(self.gambar, (self.kotak_dino.x, self.kotak_dino.y))
 
 
 class Awan:
     def __init__(self):
-        self.koordinat_x = LAYAR_LEBAR 
+        self.koordinat_x = papan_lebar 
         self.koordinat_y = random.randint(50, 150)
         self.gambar = AWAN
         self.lebar = self.gambar.get_width()
@@ -131,11 +131,11 @@ class Awan:
     def gerakan(self):
         self.koordinat_x -= kecepatan_permainan -5
         if self.koordinat_x < - self.lebar:
-            self.koordinat_x = LAYAR_LEBAR 
+            self.koordinat_x = papan_lebar 
             self.koordinat_y = random.randint(50, 150)
 
-    def tampil(self, LAYAR):
-        LAYAR.blit(self.gambar, (self.koordinat_x, self.koordinat_y))
+    def tampil(self, papan):
+        papan.blit(self.gambar, (self.koordinat_x, self.koordinat_y))
 
 
 class Rintangan:
@@ -143,18 +143,18 @@ class Rintangan:
         self.gambar = gambar
         self.tipe = tipe
         self.kotak = self.gambar[self.tipe].get_rect()
-        self.kotak.x = LAYAR_LEBAR
+        self.kotak.x = papan_lebar
         self.lebar_picu = self.gambar[self.tipe].get_width()
-        self.tinggi_picu = LAYAR_TINGGI // 2
+        self.tinggi_picu = papan_tinggi // 2
 
     def gerakan(self):
         self.kotak.x -= kecepatan_permainan
         if self.kotak.x < -self.kotak.width:
             rintangan.pop()
 
-    def tampil(self, LAYAR):
-        self.picu = pygame.draw.rect(LAYAR, WARNA_PUTIH, (self.kotak.x, LAYAR_TINGGI // 5, self.lebar_picu, self.tinggi_picu), 0)
-        LAYAR.blit(self.gambar[self.tipe], self.kotak)
+    def tampil(self, papan):
+        self.picu = pygame.draw.rect(papan, WARNA_PUTIH, (self.kotak.x, papan_tinggi // 5, self.lebar_picu, self.tinggi_picu), 0)
+        papan.blit(self.gambar[self.tipe], self.kotak)
 
 
 class KaktusKecil(Rintangan):
@@ -178,11 +178,11 @@ class Burung(Rintangan):
         self.kotak.y = 250
         self.indeks = 0
     
-    def tampil(self, LAYAR):
-        self.picu = pygame.draw.rect(LAYAR, WARNA_PUTIH, (self.kotak.x, LAYAR_TINGGI // 5, self.lebar_picu, self.tinggi_picu), 0)
+    def tampil(self, papan):
+        self.picu = pygame.draw.rect(papan, WARNA_PUTIH, (self.kotak.x, papan_tinggi // 5, self.lebar_picu, self.tinggi_picu), 0)
         if self.indeks >= 9:
             self.indeks = 0
-        LAYAR.blit(self.gambar[self.indeks // 5], self.kotak)
+        papan.blit(self.gambar[self.indeks // 5], self.kotak)
         self.indeks += 1
 
 
@@ -196,13 +196,13 @@ class Tombol:
         self.teks = teks
     
     def tampil(self):
-        pygame.draw.rect(LAYAR, WARNA_HITAM, (self.tombol_posisi_x - 2, self.tombol_posisi_y - 2, self.lebar_tombol + 4, self.tinggi_tombol + 4), 0)
-        pygame.draw.rect(LAYAR, self.warna, (self.tombol_posisi_x, self.tombol_posisi_y, self.lebar_tombol, self.tinggi_tombol), 0)
+        pygame.draw.rect(papan, WARNA_HITAM, (self.tombol_posisi_x - 2, self.tombol_posisi_y - 2, self.lebar_tombol + 4, self.tinggi_tombol + 4), 0)
+        pygame.draw.rect(papan, self.warna, (self.tombol_posisi_x, self.tombol_posisi_y, self.lebar_tombol, self.tinggi_tombol), 0)
 
         if self.teks != "":
             font = pygame.font.Font("freesansbold.ttf", 20)
             teks = font.render(self.teks, True, WARNA_HITAM)
-            LAYAR.blit(teks, (self.tombol_posisi_x + (self.lebar_tombol / 2 - teks.get_width() / 2), self.tombol_posisi_y + (self.tinggi_tombol / 2 - teks.get_height() / 2)))
+            papan.blit(teks, (self.tombol_posisi_x + (self.lebar_tombol / 2 - teks.get_width() / 2), self.tombol_posisi_y + (self.tinggi_tombol / 2 - teks.get_height() / 2)))
 
     def klik_tombol(self, posisi):
         if posisi[0] > self.tombol_posisi_x and posisi[0] < self.tombol_posisi_x + self.lebar_tombol:
@@ -247,7 +247,7 @@ def main():
             teks = font.render("+10", True, WARNA_HITAM)
             kotak_teks = teks.get_rect()
             kotak_teks.center = (1035, 65)
-            LAYAR.blit(teks, kotak_teks)
+            papan.blit(teks, kotak_teks)
             
 
         if poin % 5 == 0 and bonus_poin == True:
@@ -261,15 +261,15 @@ def main():
         teks = font.render("Skor: " + str(poin), True, WARNA_HITAM)
         kotak_teks = teks.get_rect()
         kotak_teks.center = (1000, 40)
-        LAYAR.blit(teks, kotak_teks)
+        papan.blit(teks, kotak_teks)
 
     def latar():
         global posisi_x_latar, posisi_y_latar
         lebar_gambar = LATAR.get_width()
-        LAYAR.blit(LATAR, (posisi_x_latar, posisi_y_latar))
-        LAYAR.blit(LATAR, (lebar_gambar + posisi_x_latar, posisi_y_latar))
+        papan.blit(LATAR, (posisi_x_latar, posisi_y_latar))
+        papan.blit(LATAR, (lebar_gambar + posisi_x_latar, posisi_y_latar))
         if posisi_x_latar <= -lebar_gambar:
-            LAYAR.blit(LATAR, (lebar_gambar + posisi_x_latar, posisi_y_latar))
+            papan.blit(LATAR, (lebar_gambar + posisi_x_latar, posisi_y_latar))
             posisi_x_latar = 0
         posisi_x_latar -= kecepatan_permainan
 
@@ -278,7 +278,7 @@ def main():
             if event.type == pygame.QUIT:
                 lari = False
         
-        LAYAR.fill(WARNA_PUTIH)
+        papan.fill(WARNA_PUTIH)
         userInput = pygame.key.get_pressed()
 
         if len(rintangan) == 0:
@@ -290,7 +290,7 @@ def main():
                 rintangan.append(Burung(BURUNG))
         
         for satu_rintangan in rintangan:
-            satu_rintangan.tampil(LAYAR)
+            satu_rintangan.tampil(papan)
             satu_rintangan.gerakan()
             if pemain.kotak_dino.colliderect(satu_rintangan.kotak):
                 if pygame.mixer.get_init() != None:
@@ -301,10 +301,10 @@ def main():
 
         latar()
 
-        awan.tampil(LAYAR)
+        awan.tampil(papan)
         awan.gerakan()
 
-        pemain.tampil(LAYAR)
+        pemain.tampil(papan)
         pemain.gerakan(userInput)
 
         skor()
@@ -319,19 +319,19 @@ def menu(jumlah_mati):
     tombol_keluar = Tombol(WARNA_PUTIH, 550, 295, "Keluar Permainan")
     lari = True
     while lari:
-        LAYAR.fill(WARNA_PUTIH)
+        papan.fill(WARNA_PUTIH)
         font = pygame.font.Font("freesansbold.ttf", 30)
         
         if jumlah_mati == 0:
             pengembang = font.render("Tim Pengembang: Dinocode ITERA", True, WARNA_HITAM)
             judul = font.render("++DISCONECTOSAURUS++", True, WARNA_HITAM)
             kotak_judul = judul.get_rect()
-            kotak_judul.center = (LAYAR_LEBAR // 2, LAYAR_TINGGI //2 + - 155)
-            LAYAR.blit(judul, (kotak_judul))
+            kotak_judul.center = (papan_lebar // 2, papan_tinggi //2 + - 155)
+            papan.blit(judul, (kotak_judul))
             kotak_pengembang = pengembang.get_rect()
-            kotak_pengembang.center = (LAYAR_LEBAR // 2, LAYAR_TINGGI //2 + 85)
-            LAYAR.blit(pengembang, kotak_pengembang)
-            LAYAR.blit(LARI[0], (LAYAR_LEBAR // 2 - 40, LAYAR_TINGGI // 2 - 125))
+            kotak_pengembang.center = (papan_lebar // 2, papan_tinggi //2 + 85)
+            papan.blit(pengembang, kotak_pengembang)
+            papan.blit(LARI[0], (papan_lebar // 2 - 40, papan_tinggi // 2 - 125))
             tombol_mulai.tampil()
             tombol_keluar.tampil()
         elif jumlah_mati > 0:
@@ -342,10 +342,10 @@ def menu(jumlah_mati):
             tombol_mulai.tampil()
             skor = font.render("Total Skor: " + str(poin), True, WARNA_HITAM)
             kotak_skor = skor.get_rect()
-            kotak_skor.center = (LAYAR_LEBAR // 2, LAYAR_TINGGI // 2 + 80)
-            LAYAR.blit(skor, kotak_skor)
-            LAYAR.blit(MATI, (LAYAR_LEBAR // 2 - 40, LAYAR_TINGGI // 2 - 130))
-            LAYAR.blit(PERMAINAN_SELESAI, (LAYAR_LEBAR // 2 - 190, LAYAR_TINGGI // 2 - 170))
+            kotak_skor.center = (papan_lebar // 2, papan_tinggi // 2 + 80)
+            papan.blit(skor, kotak_skor)
+            papan.blit(MATI, (papan_lebar // 2 - 40, papan_tinggi // 2 - 130))
+            papan.blit(PERMAINAN_SELESAI, (papan_lebar // 2 - 190, papan_tinggi // 2 - 170))
 
         pygame.display.update()
 
