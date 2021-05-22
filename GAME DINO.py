@@ -316,7 +316,7 @@ def main():
 def menu(jumlah_mati):
     global poin, lari
     tombol_mulai = Tombol(WARNA_PUTIH, 290, 295, "Mulai Permainan")
-    tombol_keluar = Tombol(WARNA_PUTIH, 550, 295, "Keluar Permainan")
+    tombol_keluar = Tombol(WARNA_PUTIH, 550, 295, "Keluar")
     lari = True
     while lari:
         papan.fill(WARNA_PUTIH)
@@ -343,9 +343,12 @@ def menu(jumlah_mati):
             skor = font.render("Total Skor: " + str(poin), True, WARNA_HITAM)
             kotak_skor = skor.get_rect()
             kotak_skor.center = (papan_lebar // 2, papan_tinggi // 2 + 80)
+            berakhir = font.render("PERMAINAN BERAKHIR", True, WARNA_HITAM)
+            kotak_berakhir = berakhir.get_rect()
+            kotak_berakhir.center = (papan_lebar // 2, papan_tinggi // 2 - 170)
             papan.blit(skor, kotak_skor)
             papan.blit(MATI, (papan_lebar // 2 - 40, papan_tinggi // 2 - 130))
-            papan.blit(PERMAINAN_SELESAI, (papan_lebar // 2 - 190, papan_tinggi // 2 - 170))
+            papan.blit(berakhir, kotak_berakhir)
 
         pygame.display.update()
 
